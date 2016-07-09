@@ -4,7 +4,7 @@
 module.exports = function() {
     StructureSpawn.prototype.autobuild = function () {
         var minimumNumberOfHarvesters = 6;
-        var minimumNumberOfUpgraders = 2;
+        var minimumNumberOfUpgraders = 4;
         var minimumNumberOfBuilders = 4;
         var minimumNumberOfRepairers = 1;
         var minimumNumberOfWallRepairers = 1;
