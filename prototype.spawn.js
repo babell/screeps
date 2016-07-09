@@ -47,7 +47,7 @@ module.exports = function() {
             return;
         }
 
-        var enoughEnergy = this.canCreateCreep(bodyToBuild) !== ERR_NOT_ENOUGH_ENERGY
+        var enoughEnergy = this.canCreateCreep(bodyToBuild) !== ERR_NOT_ENOUGH_ENERGY;
 
         if (enoughEnergy) {
             this.memory.hold = false;
