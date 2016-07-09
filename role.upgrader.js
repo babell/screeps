@@ -18,8 +18,10 @@ module.exports = {
         }
         // If the upgrader is not working, it should get energy so it can work.
         if (!creep.memory.working) {
-            var source = creep.pos.findClosestByPath(FIND_SOURCES, {
-                    filter: (s) =>  s.energy > 0
+            var source = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                    filter: (s) => ((s.structureType == STRUCTURE_SPAWN
+                || s.structureType == STRUCTURE_EXTENSION)
+                && s.energy > 0)
         });
             var nearestSpawn = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
                     filter: (s) => s.structureType == STRUCTURE_SPAWN
