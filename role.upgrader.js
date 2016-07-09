@@ -1,35 +1,23 @@
 module.exports = {
+    /** @param {Creep} creep **/
     run: function(creep) {
-        // If the harvester is working, but runs out of energy, it should switch to not working.
-        if (creep.memory.working && creep.carry.energy == 0){
-            creep.memory.working = false;
+
+        if(creep.memory.upgrading && creep.carry.energy == 0) {
+            creep.memory.upgrading = false;
         }
-        // If the harvester has filled up on energy it should switch to working.
-        if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
-            creep.memory.working = true;
+        if(!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) {
+            creep.memory.upgrading = true;
         }
 
-        // If the creep has energy it should do work
-        if (creep.memory.working) {
-            var controller = creep.room.controller;
-            if (creep.upgradeController(controller) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(controller);
+        if(creep.memory.upgrading) {
+            if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(creep.room.controller);
             }
         }
-        // If the upgrader is not working, it should get energy so it can work.
-        if (!creep.memory.working) {
-            var source = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                    filter: (s) => ((s.structureType == STRUCTURE_SPAWN
-                || s.structureType == STRUCTURE_EXTENSION)
-                && s.energy > 0)
-        });
-            var nearestSpawn = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
-                    filter: (s) => s.structureType == STRUCTURE_SPAWN
-        });
-            var energyHold = nearestSpawn.memory.hold;
-
-            if (!energyHold && source && source.transferEnergy(creep) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(source);
+        else {
+            var sources = creep.room.find(FIND_SOURCES);
+            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(sources[0]);
             }
         }
     }
