@@ -32,4 +32,4 @@ module.exports.loop = function () {
             roleWallRepairer.run(creep);
         }
     }
-}
+};
