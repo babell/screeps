@@ -1,30 +1,32 @@
-var roleUpgrader = require('role.upgrader');
+var roleWallRepairer = require('role.wallRepairer');
 
 module.exports = {
     run: function(creep) {
-        // If the harvester is working, but runs out of energy, it should switch to not working.
+        // If the repairer is working, but runs out of energy, it should switch to not working.
         if (creep.memory.working && creep.carry.energy == 0){
             creep.memory.working = false;
         }
-        // If the harvester has filled up on energy it should switch to working.
+        // If the repairer has filled up on energy it should switch to working.
         if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
             creep.memory.working = true;
         }
 
-        // If the creep has energy it should do work
+        // If the repairer has energy it should do work
         if (creep.memory.working) {
-            var constructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-            if (constructionSite) {
-                if (creep.build(constructionSite) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(constructionSite);
+            var buildingToRepair = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL
+        });
+            if (buildingToRepair) {
+                if(creep.repair(buildingToRepair) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(buildingToRepair);
                 }
             }
-            // If there is nothing to build, work on upgrading the controller.
+            // If there are no buildings to repair, run the builder role.
             else {
-                roleUpgrader.run(creep);
+                roleWallRepairer.run(creep);
             }
         }
-        // If the builder is not working, it should get energy so it can work.
+        // If the repairer is not working, it should get energy so it can work.
         if (!creep.memory.working) {
             var source = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                     filter: (s) => ((s.structureType == STRUCTURE_SPAWN

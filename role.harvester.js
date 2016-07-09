@@ -1,42 +1,32 @@
-var roleHarvester = {
-
-    /** @param {Creep} creep **/
+module.exports = {
     run: function(creep) {
-	    if((creep.carry.energy < creep.carryCapacity)&&(!creep.memory.upgrading)) {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[1]);
+        // If the harvester is working, but runs out of energy, it should switch to not working.
+        if (creep.memory.working && creep.carry.energy == 0){
+            creep.memory.working = false;
+        }
+        // If the harvester has filled up on energy it should switch to working.
+        if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
+            creep.memory.working = true;
+        }
+
+        // If the creep has energy it should do work
+        if (creep.memory.working) {
+            var spawn = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                    filter: (s) => (s.structureType == STRUCTURE_SPAWN
+                || s.structureType == STRUCTURE_EXTENSION)
+                && s.energy < s.energyCapacity
+        })
+            if (creep.transfer(spawn, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(spawn);
             }
         }
-        else {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN ||
-                        structure.structureType == STRUCTURE_CONTAINER) && structure.energy < structure.energyCapacity;
-                    }
-            });
-            if(targets.length > 0) {
-                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
-                }
-            }
-            else {
-                if(creep.memory.upgrading && creep.carry.energy == 0) {
-                    creep.memory.upgrading = false;
-        	    }
-        	    if(!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) {
-        	        creep.memory.upgrading = true;
-        	    }
-        
-        	    if(creep.memory.upgrading) {
-                    if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(creep.room.controller);
-                    }
-                } 
-            }
+        // If the harvester is not working, it should get energy so it can work.
+        if (!creep.memory.working) {
+            var source = creep.pos.findClosestByPath(FIND_SOURCES);
 
+            if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(source);
+            }
         }
-	}
-};
-
-module.exports = roleHarvester;
+    }
+}
