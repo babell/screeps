@@ -7,6 +7,15 @@ var roleRepairer = require('role.repairer');
 var roleWallRepairer = require('role.wallRepairer');
 
 module.exports.loop = function () {
+    // Always place this memory cleaning code at the very top of your main loop!
+
+    for(var name in Memory.creeps) {
+        if(!Game.creeps[name]) {
+            delete Memory.creeps[name];
+            console.log('Clearing non-existing creep memory:', name);
+        }
+    }
+
     Game.spawns.Spawn1.autobuild();
 
     for(let name in Game.creeps) {
