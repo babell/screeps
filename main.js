@@ -7,30 +7,30 @@ var roleRepairer = require('role.repairer');
 var roleWallRepairer = require('role.wallRepairer');
 var roleSoldier = require('role.soldier');
 var roleTowerSupplier = require('role.towerSupplier');
+var structureTower = require('structure.tower');
 
 module.exports.loop = function () {
     // Always place this memory cleaning code at the very top of your main loop!
+
+    var myRoom = Game.spawns.Spawn1.room.name;
+
 
     for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
             delete Memory.creeps[name];
             console.log('Clearing non-existing creep memory:', name);
         }
-    }
+    };
 
-    var tower = Game.getObjectById('Tower1');
-    if(tower) {
-        var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-            filter: (structure) => structure.hits < structure.hitsMax
-        });
-        if(closestDamagedStructure) {
-            tower.repair(closestDamagedStructure);
+    var towers = myRoom.find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return structure.structureType === STRUCTURE_TOWER;
         }
+    });
 
-        var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if(closestHostile) {
-            tower.attack(closestHostile);
-        }
+    for(var tower in towers)
+    {
+        structureTower.run(towers[tower]);
     }
 
     Game.spawns.Spawn1.autobuild();
