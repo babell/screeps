@@ -9,6 +9,7 @@ module.exports = function() {
         var minimumNumberOfRepairers = 2;
         var minimumNumberOfWallRepairers = 2;
         var minimumNumberOfSoldiers = 2;
+        var minimumNumberOfTowerSuppliers = 2;
 
         // count the number of creeps alive for each role
         // _.sum will count the number of properties in Game.creeps filtered by the
@@ -19,6 +20,7 @@ module.exports = function() {
         var numberOfRepairers = _.sum(Game.creeps, (c) => c.memory.role == 'repairer');
         var numberOfWallRepairers = _.sum(Game.creeps, (c) => c.memory.role == 'wallRepairer');
         var numberOfSoldiers = _.sum(Game.creeps, (c) => c.memory.role == 'soldier');
+        var numberOfTowerSuppliers = _.sum(Game.creeps, (c) => c.memory.role == 'towerSupplier');
 
         var roleToBuild = undefined;
         var bodyToBuild = undefined;
@@ -46,6 +48,10 @@ module.exports = function() {
         else if (numberOfWallRepairers < minimumNumberOfWallRepairers) {
             roleToBuild = 'wallRepairer';
             bodyToBuild = [WORK,WORK,CARRY,MOVE,MOVE]
+        }
+        else if (numberOfTowerSuppliers < minimumNumberOfTowerSuppliers) {
+            roleToBuild = 'towerSupplier';
+            bodyToBuild = [WORK,CARRY,MOVE,MOVE];
         }
 
         if (!roleToBuild){
