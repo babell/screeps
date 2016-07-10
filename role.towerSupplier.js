@@ -17,6 +17,10 @@ module.exports = {
                     creep.moveTo(tower);
                 }
             }
+            else {
+                var flags = creep.room.find(FIND_FLAGS);
+                creep.moveTo(flags[0]);
+            }
         }
         else {
             var sources = creep.room.find(FIND_SOURCES);
