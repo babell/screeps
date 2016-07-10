@@ -22,7 +22,7 @@ module.exports.loop = function () {
         }
     };
 
-    var towers = myRoom.find(FIND_STRUCTURES, {
+    var towers = Game.spawns.Spawn1.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return structure.structureType === STRUCTURE_TOWER;
         }
