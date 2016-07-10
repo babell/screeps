@@ -63,7 +63,7 @@ module.exports.loop = function () {
         }
 
         if (creep.memory.role === 'towerSupplier') {
-            roleSoldier.run(creep);
+            roleTowerSupplier.run(creep);
         }
     }
 };
