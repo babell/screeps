@@ -12,9 +12,6 @@ var structureTower = require('structure.tower');
 module.exports.loop = function () {
     // Always place this memory cleaning code at the very top of your main loop!
 
-    var myRoom = Game.spawns.Spawn1.room.name;
-
-
     for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
             delete Memory.creeps[name];
