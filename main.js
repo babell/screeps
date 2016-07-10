@@ -5,6 +5,7 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repairer');
 var roleWallRepairer = require('role.wallRepairer');
+var roleSoldier = require('role.soldier');
 
 module.exports.loop = function () {
     // Always place this memory cleaning code at the very top of your main loop!
@@ -39,6 +40,10 @@ module.exports.loop = function () {
 
         if (creep.memory.role === 'wallRepairer') {
             roleWallRepairer.run(creep);
+        }
+
+        if (creep.memory.role === 'soldier') {
+            roleSoldier.run(creep);
         }
     }
 };
