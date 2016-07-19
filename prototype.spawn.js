@@ -22,6 +22,8 @@ module.exports = function() {
         var numberOfSoldiers = _.sum(Game.creeps, (c) => c.memory.role == 'soldier');
         var numberOfTowerSuppliers = _.sum(Game.creeps, (c) => c.memory.role == 'towerSupplier');
 
+        var enemies = Game.spawns.Spawn1.room.find(FIND_HOSTILE_CREEPS);
+        
         var roleToBuild = undefined;
         var bodyToBuild = undefined;
 
@@ -29,7 +31,7 @@ module.exports = function() {
             roleToBuild = 'harvester';
             bodyToBuild = [WORK,CARRY,MOVE,WORK];
         }
-        else if (numberOfSoldiers < minimumNumberOfSoldiers) {
+        else if (numberOfSoldiers < minimumNumberOfSoldiers && enemies.length>0) {
             roleToBuild = 'soldier';
             bodyToBuild = [ATTACK,ATTACK,ATTACK,ATTACK,MOVE,MOVE,MOVE,MOVE];
         }
