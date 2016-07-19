@@ -10,14 +10,14 @@ module.exports = {
         }
 
         if(creep.memory.working) {
-            var tower=creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                filter: (s) => (s.structureType == STRUCTURE_TOWER)});
-            if(tower) {
-                if(creep.transfer(tower, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            var tower = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_TOWER
+            });
+            if (tower) {
+                if(creep.repair(tower) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(tower);
                 }
-            }
-            else {
+            } else {
                 var flags = creep.room.find(FIND_FLAGS);
                 creep.moveTo(flags[0]);
             }
